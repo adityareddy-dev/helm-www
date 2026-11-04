@@ -173,16 +173,15 @@ version:
 {{- end }}
 ```
 
-If we render this, we will get an error like this:
+Render this with a client dry run to inspect the template without connecting to
+the cluster:
 
 ```console
-$ helm install --dry-run moldy-jaguar ./mychart
-Error: unable to build kubernetes objects from release manifest: error validating "": error validating data: [unknown object type "nil" in ConfigMap.metadata.labels.chart, unknown object type "nil" in ConfigMap.metadata.labels.version]
+$ helm install --dry-run=client moldy-jaguar ./mychart
 ```
 
-To see what rendered, re-run with `--disable-openapi-validation`:
-`helm install --dry-run --disable-openapi-validation moldy-jaguar ./mychart`.
-The result will not be what we expect:
+The client dry run does not perform cluster schema validation. It renders the
+chart name and version as empty values:
 
 ```yaml
 # Source: mychart/templates/configmap.yaml
@@ -222,7 +221,7 @@ pass `.Values` or `.Values.favorite` or whatever scope we want. But what we want
 is the top-level scope. In the context of the named template, `$` will refer
 to the scope you passed in and not some global scope.
 
-Now when we execute this template with `helm install --dry-run --debug
+Now when we execute this template with `helm install --dry-run=client --debug
 plinking-anaco ./mychart`, we get this:
 
 ```yaml
@@ -270,16 +269,13 @@ data:
 {{ template "mychart.app" . }}
 ```
 
-If we render this, we will get an error like this:
+Render this with a client dry run to inspect the indentation:
 
 ```console
-$ helm install --dry-run measly-whippet ./mychart
-Error: unable to build kubernetes objects from release manifest: error validating "": error validating data: [ValidationError(ConfigMap): unknown field "app_name" in io.k8s.api.core.v1.ConfigMap, ValidationError(ConfigMap): unknown field "app_version" in io.k8s.api.core.v1.ConfigMap]
+$ helm install --dry-run=client measly-whippet ./mychart
 ```
 
-To see what rendered, re-run with `--disable-openapi-validation`:
-`helm install --dry-run --disable-openapi-validation measly-whippet ./mychart`.
-The output will not be what we expect:
+The command succeeds, but the output will not be what we expect:
 
 ```yaml
 # Source: mychart/templates/configmap.yaml
