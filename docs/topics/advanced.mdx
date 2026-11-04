@@ -51,8 +51,11 @@ If you wish to use multiple post-renderers, call all of them in a script or
 together in whatever binary tool you have built. In bash, this would be as
 simple as `renderer1 | renderer2 | renderer3`.
 
-You can see an example of using `kustomize` as a post-renderer
-[here](https://github.com/thomastaylor312/advanced-helm-demos/tree/master/post-render).
+For Helm 3, see the
+[`kustomize` post-renderer example](https://github.com/thomastaylor312/advanced-helm-demos/tree/master/post-render).
+For Helm 4, package the executable as a `postrenderer/v1` plugin using the
+[plugin migration guide](/plugins/migrate.md) and the
+[Subprocess Runtime tutorial](/plugins/developer/tutorial-postrenderer-plugin.mdx#subprocess-runtime).
 
 #### Filenames
 Each manifest passed to the post-renderer includes a temporary annotation:
